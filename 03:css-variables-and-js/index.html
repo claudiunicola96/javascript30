@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Update CSS Variables with JS</title>
+    <link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+    <h2>Update CSS Variables with <span class="h1">JS</span></h2>
+
+    <div class="controls">
+        <label for="spacing">Spacing:</label>
+        <input type="range" name="spacing" id="spacing" min="0" max="200" value="10" data-sizing="px" />
+
+        <label for="blur">Blur:</label>
+        <input type="range" name="blur" id="blur" min="0" max="25" value="2" data-sizing="px" />
+
+        <label for="base-color">Base Color:</label>
+        <input type="color" name="base-color" id="base-color" min="0" max="25" value="#fff600" />
+    </div>
+
+    <img src="https://www.evozon.com/wp-content/uploads/2015/03/internship-site.jpg"></img>
+</body>
+<script>
+    const inputs = document.querySelectorAll('.controls input');
+
+    function handleUpdate() {
+        // get value of data-sizing or empty string
+        const suffix = this.dataset.sizing || '';
+        document.documentElement.style.setProperty(`--${this.name}`, this.value + suffix);
+    }
+
+    inputs.forEach(input => input.addEventListener('change', handleUpdate));
+    inputs.forEach(input => input.addEventListener('mousemove', handleUpdate));
+</script>
+
+</html>
