@@ -1,18 +1,52 @@
-var DrawObject = function () {
-    return {
-        isDrawing: false,
-        lastX: 0,
-        lastY: 0,
-        hue: 0,
-        direction: true,
+class Draw {
+    constructor() {
+        this.isDrawing = false;
+        this.direction = true;
+        this.lastX = 0;
+        this.lastY = 0;
+        this.hue = 0;
+    }
+    get lastX() {
+        return this._lastX;
+    }
+
+    get lastY() {
+        return this._lastY;
+    }
+
+    set lastX(x) {
+        this._lastX = x;
+    }
+
+    set lastY(y) {
+        this._lastY = y;
+    }
+
+    setDrawing(flag) {
+        if (typeof (flag) === 'boolean') {
+            this.isDrawing = true;
+        }
+    }
+
+    canDrawing() {
+        return this.isDrawing;
+    }
+
+    changeHue() {
+        this.hue++;
+        if (this.hue >= 360)
+            this.hue = 0;
+    }
+
+    changeDirection() {
+        this.direction = !this.direction;
     }
 }
-
 document.addEventListener('DOMContentLoaded', function () {
     function draw(event) {
         // stop running function when
         // the mousedown event isn't fired
-        if (!drawObject.isDrawing) return;
+        if (!drawObject.canDrawing()) return;
 
         context.strokeStyle = `hsl(${drawObject.hue}, 100%, 70%)`
         context.beginPath();
@@ -21,12 +55,9 @@ document.addEventListener('DOMContentLoaded', function () {
         // go to
         context.lineTo(event.offsetX, event.offsetY);
         context.stroke();
-        drawObject.hue++;
-        if (drawObject.hue >= 360) {
-            drawObject.hue = 0;
-        }
+        drawObject.changeHue();
         if (context.lineWidth >= 100 || context.lineWidth <= 1) {
-            drawObject.direction = !drawObject.direction;
+            drawObject.changeDirection();
         }
         if (drawObject.direction) {
             context.lineWidth++;
@@ -43,14 +74,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
     [context.strokeStyle, context.lineJoin, context.lineCap] = ['#BADA55', 'round', 'round'];
 
-    drawObject = new DrawObject();
+    const drawObject = new Draw();
 
     canvas.addEventListener('mousemove', draw);
     canvas.addEventListener('mousedown', () => {
-        drawObject.isDrawing = true;
+        drawObject.setDrawing(true);
         [drawObject.lastX, drawObject.lastY] = [event.offsetX, event.offsetY];
     });
-    canvas.addEventListener('mouseup', () => drawObject.isDrawing = false);
-    canvas.addEventListener('mouseout', () => drawObject.isDrawing = false)
+    canvas.addEventListener('mouseup', () => drawObject.setDrawing(false));
+    canvas.addEventListener('mouseout', () => drawObject.setDrawing(false));
 });
 
