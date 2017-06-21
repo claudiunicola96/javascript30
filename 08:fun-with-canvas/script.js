@@ -24,7 +24,7 @@ class Draw {
 
     setDrawing(flag) {
         if (typeof (flag) === 'boolean') {
-            this.isDrawing = true;
+            this.isDrawing = flag;
         }
     }
 
